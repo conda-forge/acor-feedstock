@@ -1,4 +1,4 @@
-Port to NumPy 2 C API: use NPY_ARRAY_* flags and PyArrayObject pointers
+Port to NumPy 2 C API and fix Python 2-style implicit relative imports
 
 --- a/acor/_acor.c
 +++ b/acor/_acor.c
@@ -42,3 +42,23 @@ Port to NumPy 2 C API: use NPY_ARRAY_* flags and PyArrayObject pointers
      if (data_array == NULL || out_array == NULL) {
          PyErr_SetString(PyExc_TypeError,
                  "The input data must be a numpy.ndarrays.");
+--- a/acor/acor.py
++++ b/acor/acor.py
+@@ -2,7 +2,7 @@
+ 
+ import numpy as np
+ 
+-import _acor
++from . import _acor
+ 
+ 
+ def acor(data, maxlag=10):
+--- a/acor/__init__.py
++++ b/acor/__init__.py
+@@ -6,5 +6,5 @@
+ 
+ """
+ 
+-from acor import *
++from .acor import *
+ 
