@@ -9,10 +9,12 @@ package:
 source:
   url: https://files.pythonhosted.org/packages/source/{{ name[0] }}/{{ name }}/acor-{{ version }}.tar.gz
   sha256: 4c647d30326004cfcfbcf630e97586ce574954e36bebf75b657d33d5d79e94e3
+  patches:
+    - numpy2.patch
 
 build:
   number: 6
-  script: {{ PYTHON }} -m pip install . -vv
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   build:
@@ -22,15 +24,16 @@ requirements:
     - numpy
     - pip
     - python
+    - setuptools
   run:
     - python
-    - {{ pin_compatible('numpy') }}
 
 test:
   imports:
     - acor
   commands:
     - pip check
+    - python -c "import numpy as np, acor; tau, mean, sigma = acor.acor(np.random.randn(10000)); assert 0 < tau < 5, tau"
   requires:
     - pip
 
